@@ -1,5 +1,6 @@
 ﻿using UnityEngine.SceneManagement;
 using UnityEngine;
+using Impaler.Score;
 
 public class RetryHandler : MonoBehaviour
 {

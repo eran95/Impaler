@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Impaler.Orb;
+using System.Collections;
 using UnityEngine;
 
 public class SpearHandler : MonoBehaviour
@@ -169,18 +170,18 @@ public class SpearHandler : MonoBehaviour
         int i;
         GameObject[] orbs = master.GetOrbsArray();
         for ( i = 0; i < orbs.Length; i++)
-            orbs[i].GetComponent<Ball>().speed *= speedMultiplier;
+            orbs[i].GetComponent<Orb>().Speed *= speedMultiplier;
         orbs = master.GetOrbBadOrbs();
         for(i=0;i<orbs.Length;i++)
-            orbs[i].GetComponent<Ball>().speed *= speedMultiplier;
-        master.getHealthOrb().GetComponent<Ball>().speed *= speedMultiplier;
+            orbs[i].GetComponent<Orb>().Speed *= speedMultiplier;
+        master.getHealthOrb().GetComponent<Orb>().Speed *= speedMultiplier;
         ResetBools();
         transform.position = master._spearInitPos;
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        Ball ball = col.gameObject.GetComponent<Ball>();
-        ball.speed = 0;
+        Orb ball = col.gameObject.GetComponent<Orb>();
+        ball.Speed = 0;
         ParticleSystem particles = ball.BallParticles().GetComponent<ParticleSystem>();
         Transform ballTransform = ball.transform;
         particles.transform.position = ballTransform.position;

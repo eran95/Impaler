@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Impaler.Orb;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -125,10 +126,10 @@ public class GameMaster : MasterParent
         float t = ((commonx - x0) / speed);/*The moment the first orb will reach the selected common point*/
         if (inTutorial)
         {
-            orbs[0].GetComponent<Ball>().SetTutorial(commonx);
+            orbs[0].GetComponent<Orb>().SetTutorial(commonx);
             StartCoroutine(EnableTutorialObject(t));
         }
-        orbs[0].GetComponent<Ball>().speed = speed;
+        orbs[0].GetComponent<Orb>().Speed = speed;
         for (int i = 1; i < ballCount; i++)//Handling the rest of the orbs
         {
             yield return new WaitForSeconds(Random.Range(minWaitTimes[i], maxWaitTimes[i]));
@@ -136,7 +137,7 @@ public class GameMaster : MasterParent
             orbs[i].transform.position = new Vector3(x0, orbs[i].transform.position.y,
                 orbs[i].transform.position.z);
             if (inTutorial)
-                orbs[i].GetComponent<Ball>().SetTutorial(commonx);
+                orbs[i].GetComponent<Orb>().SetTutorial(commonx);
             else if (canSpawnHealthOrb && score > 17 && score-prevScore > ballCount*4 &&
                 misses < missSprites.Length && Random.Range(0, 4 - (missSprites.Length-misses)) == 0)
             {
@@ -165,7 +166,7 @@ public class GameMaster : MasterParent
             /*Since all sequential balls will start moving after a certain delay, we substract from
               t the time that has passed since the first ball's launch to adjust their speed
               in accordance with the delay.*/
-            orbs[i].GetComponent<Ball>().speed = (commonx - x0) / (t - (Time.time - t0));
+            orbs[i].GetComponent<Orb>().Speed = (commonx - x0) / (t - (Time.time - t0));
 
         }
         spawningOrbs = false;
@@ -174,7 +175,7 @@ public class GameMaster : MasterParent
     private void spawnHealthOrb(float t, float commonx, float t0, Vector3 pos)
     {
         healthOrb.transform.position = pos;
-        healthOrb.GetComponent<Ball>().speed = (commonx - pos.x) / (t - (Time.time - t0));
+        healthOrb.GetComponent<Orb>().Speed = (commonx - pos.x) / (t - (Time.time - t0));
     }
 
     private IEnumerator EnableTutorialObject(float t)
@@ -202,7 +203,7 @@ public class GameMaster : MasterParent
         float commonx = mainCam.transform.position.x + Mathf.Sign(x0) * maxXDiff;
         float t = ((commonx - x0) / speed);/*The moment the first orb will reach 
         the selected common point*/
-        orbs[0].GetComponent<Ball>().speed = speed;
+        orbs[0].GetComponent<Orb>().Speed = speed;
         //TESTING
         float temp = ((maxXDiff - spawnx) / -maxSpeed);//When the first orb will reach commonx
         //Debug.Log("MAXSPEED:" + ((maxXDiff - (-spawnx)) / (temp - maxWaitTime * (ballCount - 1))));
@@ -241,7 +242,7 @@ public class GameMaster : MasterParent
             /*Since all subsequent balls will start moving after a certain delay, we substract from
              t the time that has passed since the first ball's launch to adjust their speed
              in accordance with the delay.*/
-            orbs[i].GetComponent<Ball>().speed = (commonx - x0) / (t - (Time.time - t0));
+            orbs[i].GetComponent<Orb>().Speed = (commonx - x0) / (t - (Time.time - t0));
         }
         spawningOrbs = false;
     }
@@ -263,7 +264,7 @@ public class GameMaster : MasterParent
         float speed = (-Mathf.Sign(x0)) * minSpeed;
         float t = ((commonx - x0) / speed);/*The moment the first ball will reach the
         selected common point*/
-        orbs[0].GetComponent<Ball>().speed = speed;
+        orbs[0].GetComponent<Orb>().Speed = speed;
 
         //TESTING
         float temp = ((-maxXDiff - spawnx) / -minSpeed);//When the first orb will reach commonx
@@ -305,7 +306,7 @@ public class GameMaster : MasterParent
             /*Since all sequential balls will start moving after a certain delay, we substract from
              t the time that has passed since the first ball's launch to adjust their speed
              in accordance with the delay.*/
-            orbs[i].GetComponent<Ball>().speed = (commonx - x0) / (t - (Time.time - t0));
+            orbs[i].GetComponent<Orb>().Speed = (commonx - x0) / (t - (Time.time - t0));
         }
         spawningOrbs = false;
     }
@@ -313,7 +314,7 @@ public class GameMaster : MasterParent
     {
         float time = t - (Time.time - t0) + generateSign() * Random.Range(0.24f, 0.26f);
         badOrbs[index].transform.position = pos;
-        badOrbs[index].GetComponent<Ball>().speed = (commonx - pos.x) / time;
+        badOrbs[index].GetComponent<Orb>().Speed = (commonx - pos.x) / time;
     }
 
     public void MissHandler()
@@ -399,22 +400,22 @@ public class GameMaster : MasterParent
     {
         StartCoroutine(UpdateBadOrbsPos());
         StartCoroutine(updateHealthOrbPos());
-        Ball orb;
+        Orb orb;
         for (int i = 0; i < ballCount; i++)
         {
-            orb = orbs[i].GetComponent<Ball>();
-            while (orb.speed != 0)//Wait for the orb to be outside of the viewable area.
+            orb = orbs[i].GetComponent<Orb>();
+            while (orb.Speed != 0)//Wait for the orb to be outside of the viewable area.
                 yield return null;
             orbs[i].transform.position = new Vector3(orbs[i].transform.position.x, y0 - diffy * i);
         }
     }
     private IEnumerator UpdateBadOrbsPos()
     {
-        Ball badOrb;
+        Orb badOrb;
         for (int i = 0; i < badOrbs.Length; i++)
         {
-            badOrb = badOrbs[i].GetComponent<Ball>();
-            while (badOrb.speed != 0)
+            badOrb = badOrbs[i].GetComponent<Orb>();
+            while (badOrb.Speed != 0)
                 yield return null;
             badOrb.transform.position = new Vector3(badOrb.transform.position.x, y0);
         }
@@ -422,8 +423,8 @@ public class GameMaster : MasterParent
 
     private IEnumerator updateHealthOrbPos()
     {
-        Ball orb = healthOrb.GetComponent<Ball>();
-        while (orb.speed != 0)
+        Orb orb = healthOrb.GetComponent<Orb>();
+        while (orb.Speed != 0)
             yield return null;
         orb.transform.position = new Vector3(orb.transform.position.x, y0);
     }

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using Impaler.Orb;
+using Impaler.Score;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +15,7 @@ public class TutorialHandler : MonoBehaviour
         terminateTutorial = true;
         //If a high score file exists, it means the player already knows how to play the game
         ScoreFileHandler scoreFileHandler = ScoreFileHandler.GetScoreFileHandler();
-        if (File.Exists(scoreFileHandler.filePath))
+        if (File.Exists(scoreFileHandler.FilePath))
         {
             terminateTutorial = false;
             Destroy(gameObject);
@@ -40,7 +42,7 @@ public class TutorialHandler : MonoBehaviour
             GameMaster gameMaster = GameMaster.GetGameMaster();
             GameObject[] orbs = gameMaster.GetOrbsArray();
             for (int i = 0; i < gameMaster.ballCount; i++)
-                orbs[i].GetComponent<Ball>().TerminateTutorial();
+                orbs[i].GetComponent<Orb>().TerminateTutorial();
         }
     }
 }
