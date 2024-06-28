@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Impaler.Score
 {
-    public class ScoreFileHandler : MonoBehaviour
+    public class ScoreFileHandler : MonoBehaviour, IScoreFileHandler
     {
         private GameMaster gameMaster;
         public string FilePath { get; private set; }
@@ -71,6 +71,7 @@ namespace Impaler.Score
 
         public void ReadScoreFile()
         {
+            Debug.Log("Score file read");
             scoreText.text = "High score: " + _score;
         }
     }

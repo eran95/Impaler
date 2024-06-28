@@ -2,15 +2,20 @@
 using Impaler.Score;
 using System.Collections;
 using UnityEngine;
+using Zenject;
 
 public class MenuMaster : MasterParent
 {
     [SerializeField] private float minWaitTime, maxWaitTime;
+
+    [Inject]
+    private void Init(ScoreFileHandler scoreFileHandler)
+    {
+        scoreFileHandler.ReadScoreFile();
+    }
     protected override void Awake()
     {
         base.Awake();
-        ScoreFileHandler myRef = ScoreFileHandler.GetScoreFileHandler();
-        myRef.ReadScoreFile();
         InvokeRepeating("CheckForOrbs", 0, 1f);
         
     }
